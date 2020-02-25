@@ -6,7 +6,7 @@ using UnityEngine;
 public class Health_Pickups : Pickups
 {
     [SerializeField] private float amount;
-    protected override void OnPickUp(PlayerData player)
+    protected override void OnPickUp(Health player)
     {
         player.Heal(amount);
         base.OnPickUp(player);

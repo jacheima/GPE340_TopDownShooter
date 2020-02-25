@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.RestService;
 using UnityEngine;
 
 public class Pickups : MonoBehaviour
@@ -12,10 +13,14 @@ public class Pickups : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        OnPickUp(other.GetComponent<PlayerData>());
+        if (other.GetComponent<PlayerController>())
+        {
+            OnPickUp(other.GetComponent<Health>());
+        }
+        
     }
 
-    protected virtual void OnPickUp(PlayerData player)
+    protected virtual void OnPickUp(Health player)
     {
         Destroy(gameObject);
     }
