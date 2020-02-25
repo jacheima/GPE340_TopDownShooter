@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     {
         main = GetComponent<Camera>();
         offset = transform.position - target.transform.position;
+        target = GameObject.Find("Player").GetComponent<Transform>();
     }
 
     void Update()

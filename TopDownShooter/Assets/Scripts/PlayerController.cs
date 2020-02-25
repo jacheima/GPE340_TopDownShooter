@@ -8,6 +8,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Pawn pawn;
     [SerializeField] private Camera main;
 
+    void Start()
+    {
+        pawn = GetComponent<Pawn>();
+        main = GameObject.Find("Main Camera").GetComponent<Camera>();
+    }
+
     void Update()
     {
         pawn.HandleMovement(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));

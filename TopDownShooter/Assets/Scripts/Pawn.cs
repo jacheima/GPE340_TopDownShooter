@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class Pawn : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    public Animator animation;
+    [SerializeField] private float speed = 50;
+    public Animator anim;
 
     private void Awake()
     {
-        animation = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
     }
 
     public void HandleMovement(Vector2 movement)
     {
         //set the parameters that controll the animations movement
-        animation.SetFloat("Horizontal", movement.x * speed);
-        animation.SetFloat("Vertical", movement.y * speed);
+        anim.SetFloat("Horizontal", movement.x * speed);
+        anim.SetFloat("Vertical", movement.y * speed);
     }
 }

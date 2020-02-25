@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public class PlayerData : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private float health;
     void Start()
     {
         
@@ -13,6 +13,11 @@ public class Pickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(Vector3.up, 90 * Time.deltaTime);
+        
+    }
+
+    public void Heal(float amount)
+    {
+        health += amount;
     }
 }
