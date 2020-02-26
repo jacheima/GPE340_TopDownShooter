@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class UI : MonoBehaviour
 {
-    public Health health;
+    public Player health;
     [SerializeField] private Image healthFill;
 
     private void Awake()
     {
-        health = GameObject.Find("Player").GetComponent<Health>();
+        health = GameObject.Find("Player").GetComponent<Player>();
     }
 
     private void Update()

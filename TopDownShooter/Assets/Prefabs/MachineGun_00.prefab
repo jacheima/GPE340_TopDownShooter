@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 3665866808576115196}
   - component: {fileID: 3665866808577666044}
   - component: {fileID: 7273686477610684232}
+  - component: {fileID: 4810796776517524161}
   m_Layer: 0
   m_Name: MachineGun_00
   m_TagString: Untagged
@@ -290,6 +291,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91adf975f66b51d4fa7cd2afff6eb65a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageAmount: 0
+  attackSpeed: 0
+  onStartAttack:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onEndAttack:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!65 &4810796776517524161
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3665866808587180084}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.46, y: 0.1, z: 0.09}
+  m_Center: {x: -0.05, y: 0.09, z: 0.03}
 --- !u!1 &3665866808587180086
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,12 +15,12 @@ public class Pickups : MonoBehaviour
     {
         if (other.GetComponent<PlayerController>())
         {
-            OnPickUp(other.GetComponent<Health>());
+            OnPickUp(other.GetComponent<Player>());
         }
         
     }
 
-    protected virtual void OnPickUp(Health player)
+    protected virtual void OnPickUp(Player player)
     {
         Destroy(gameObject);
     }

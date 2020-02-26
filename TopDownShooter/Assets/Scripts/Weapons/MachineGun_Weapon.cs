@@ -10,7 +10,7 @@ public class MachineGun_Weapon : Weapon
     private float fireRate = .25f;
     private float timer;
 
-    protected override Start()
+    protected override void Start()
     {
         onStartAttack.AddListener(OnStartAttack);
         onEndAttack.AddListener(OnEndAttack);

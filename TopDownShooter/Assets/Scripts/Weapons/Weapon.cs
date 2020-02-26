@@ -11,13 +11,15 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected UnityEvent onStartAttack;
     [SerializeField] protected UnityEvent onEndAttack;
 
+    public int weaponType;
+
     protected virtual void Start()
     {
 
     }
     protected virtual void Update()
     {
-        
+
     }
     protected virtual void OnStartAttack()
     {
@@ -28,4 +30,5 @@ public class Weapon : MonoBehaviour
     {
 
     }
+
 }
