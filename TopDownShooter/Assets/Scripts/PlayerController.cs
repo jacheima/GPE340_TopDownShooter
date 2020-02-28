@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //call the handle movement method in the pawn script
-        pawn.HandleMovement(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+        pawn.HandleMovement(new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")));
 
         //if the player presses the left mouse button
         if (Input.GetButtonDown("Fire1"))

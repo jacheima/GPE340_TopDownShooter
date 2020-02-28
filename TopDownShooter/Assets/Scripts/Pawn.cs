@@ -6,12 +6,14 @@ using UnityEngine;
 public class Pawn : MonoBehaviour
 {
     //the speed the player moves at
-    [SerializeField] private float speed = 50;
+    [SerializeField] private float speed;
     //reference to the animator
     public Animator anim;
 
     //reference to the player component
     private Player player;
+
+    private Enemy enemy;
 
     private void Awake()
     {
@@ -22,11 +24,11 @@ public class Pawn : MonoBehaviour
     }
 
     //this method handles the movement, by setting the variables in the animator
-    public void HandleMovement(Vector2 movement)
+    public void HandleMovement(Vector3 movement)
     {
         //set the parameters that controls the animations movement
         anim.SetFloat("Horizontal", movement.x * speed);
-        anim.SetFloat("Vertical", movement.y * speed);
+        anim.SetFloat("Vertical", movement.z * speed);
     }
 
     //this method handles shooting, by setting the isTriggerPulled to true
@@ -39,6 +41,7 @@ public class Pawn : MonoBehaviour
             player.equippedWeapon.isTriggerPulled = true;
         }
     }
+
 
 
 }
