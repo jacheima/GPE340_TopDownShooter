@@ -3,20 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+//This class takes input and tells the player what to do with it
 public class PlayerController : MonoBehaviour
 {
+    //reference to the pawn class
     [SerializeField] private Pawn pawn;
+    //reference to the main camera
     [SerializeField] private Camera main;
 
     void Start()
     {
+        //get the pawn component and set it to pawn
         pawn = GetComponent<Pawn>();
+        //find the camera and get the camera component
         main = GameObject.Find("Main Camera").GetComponent<Camera>();
     }
 
     void Update()
     {
+        //call the handle movement method in the pawn script
         pawn.HandleMovement(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
+
+        //if the player presses the left mouse button
+        if (Input.GetButtonDown("Fire1"))
+        {
+            //call the handle shooting method in pawn script
+            pawn.HandleShooting();
+        }
 
         ////for running
         //if (Input.GetKeyDown(KeyCode.LeftShift))
