@@ -14,6 +14,12 @@ public class Enemy : EnemyController
 
     public float currentHealth;
 
+    void Start()
+    {
+        currentHealth = initialHealth;
+        this.gameObject.GetComponent<Pawn>().anim.SetFloat("Health", currentHealth);
+    }
+
     //this function adds the heal amount to the current health
     public void Heal(float amount)
     {

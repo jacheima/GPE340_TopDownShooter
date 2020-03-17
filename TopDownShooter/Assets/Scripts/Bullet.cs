@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour
         if (other.gameObject.GetComponent<Health>())
         {
             //call the TakeDamage method on the Health component on that gameobject
-            other.gameObject.GetComponent<Health>().TakeDamage(damage);
+            other.gameObject.GetComponent<Health>().TakeDamage(damage, other.gameObject);
 
             //then destroy the bullet
             Destroy(this.gameObject);

@@ -2,12 +2,30 @@
 using System.Collections.Generic;
 using System.Net.Mime;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-    
+    float waitTime = 5f;
+    float stateStartTime;
+
+    private bool isDead;
+
+    void Start()
+    {
+        isDead = false;
+    }
+
+    void Update()
+    {
+        if (Time.time > stateStartTime + waitTime && isDead)
+        {
+            Kill(this.gameObject);
+        }
+    }
+
     //this method heals the enemy or player the amount designated by the health pack
     public void Heal(float amount)
     {
@@ -54,19 +72,19 @@ public class Health : MonoBehaviour
     }
 
     //This method adds damage to the enemy or player
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, GameObject pawn)
     {
         //if the player took damage
-        if (gameObject.GetComponent<Player>())
+        if (pawn.GetComponent<Player>())
         {
             //save the player component to a variable for accessibility
-            Player player = gameObject.GetComponent<Player>();
+            Player player = pawn.GetComponent<Player>();
 
             //if the players health would be less than or equal to 0 after taking the damage
             if (player.currentHealth - damage <= 0)
             {
                 //call the kill function which would instantly kill the player
-                Kill(player.gameObject);
+                Kill(pawn);
             }
             //otherwise,
             else
@@ -75,19 +93,24 @@ public class Health : MonoBehaviour
                 player.TakeDamage(damage);
             }
 
-            
+
         }
         //if the enemy took damage
-        else if (gameObject.GetComponent<Enemy>())
+        else if (pawn.GetComponent<Enemy>())
         {
             //save the enemy component to a variable for accessibility
-            Enemy enemy = gameObject.GetComponent<Enemy>();
+            Enemy enemy = pawn.GetComponent<Enemy>();
 
             //if the enemy health would be less than or equal to 0 after taking damage
             if (enemy.currentHealth - damage <= 0)
             {
-                //call the kill function which would instantly kill the enemy
-                Kill(enemy.gameObject);
+                pawn.GetComponent<Pawn>().anim.SetFloat("Health", 0);
+                pawn.GetComponent<NavMeshAgent>().destination = this.gameObject.transform.position;
+
+                isDead = true;
+                float stateStartTime = Time.time;
+                
+
             }
             //otherwise, 
             else
@@ -99,7 +122,7 @@ public class Health : MonoBehaviour
     }
 
     //this function kills the gameobject passed into the function
-    void Kill(GameObject kill)
+    public void Kill(GameObject kill)
     {
         //destroy the gameobject passed to it
         Destroy(kill);

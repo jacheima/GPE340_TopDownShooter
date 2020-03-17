@@ -11,7 +11,7 @@ public class HurtPlayer : MonoBehaviour
         if (other.gameObject.GetComponent<Player>())
         {
             //apply 10 damage
-            other.gameObject.GetComponent<Health>().TakeDamage(10);
+            other.gameObject.GetComponent<Health>().TakeDamage(10, other.gameObject);
         }
     }
 }

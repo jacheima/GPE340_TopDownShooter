@@ -16,12 +16,11 @@ public class EnemyController : MonoBehaviour
         pawn = gameObject.GetComponent<Pawn>();
         target = GameObject.Find("Player").GetComponent<Transform>();
     }
-    protected virtual void Update()
+    public void Update()
     {
-        Vector3 input = navMeshAgent.desiredVelocity;
-        input = transform.InverseTransformDirection(input);
+        Debug.Log(navMeshAgent.destination);
         navMeshAgent.SetDestination(target.position);
-        pawn.HandleMovement(input);
+        pawn.HandleEnemyMovement();
     }
 
     protected void OnAnimatorMove()

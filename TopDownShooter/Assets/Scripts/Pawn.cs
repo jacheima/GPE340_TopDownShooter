@@ -31,6 +31,11 @@ public class Pawn : MonoBehaviour
         anim.SetFloat("Vertical", movement.z * speed);
     }
 
+    public void HandleEnemyMovement()
+    {
+        anim.SetFloat("Speed", speed);
+    }
+
     //this method handles shooting, by setting the isTriggerPulled to true
     public void HandleShooting()
     {
