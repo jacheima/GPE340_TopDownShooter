@@ -9,14 +9,19 @@ public class Pawn : MonoBehaviour
     [SerializeField] private float speed;
     //reference to the animator
     public Animator anim;
-    public LayerMask layer;
 
     //reference to the player component
-    private Player player;
-
+    public Player player;
     private Enemy enemy;
 
-    [Header("FOV")] public float viewRadius;
+    [Header("FOV")]
+    public float viewRadius;
+    public float viewAngle;
+    public Transform lastKnownTransform;
+    public float distanceToTarget;
+    public Transform target;
+    public Transform tempTarget;
+    public Mesh newMesh;
 
     private void Awake()
     {
@@ -26,38 +31,73 @@ public class Pawn : MonoBehaviour
         player = GetComponent<Player>();
     }
 
+    void Start()
+    {
+        tempTarget = new GameObject("FollowTarget").transform;
+    }
+
     void Update()
     {
+        //if this game object has the enemy component (if this is an enemy)
         if (this.gameObject.GetComponent<Enemy>())
         {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, viewRadius, layer);
 
+            //set the enemy by getting the enemy component on this gameobject
+            Enemy enemyPawn = this.gameObject.GetComponent<Enemy>();
+
+            //create an array populated with every game object in the view radius
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, viewRadius);
+
+            //for each hit in the hitColliders array
             for (int i = 0; i < hitColliders.Length; i++)
             {
-                Transform target = hitColliders[i].transform;
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
-
+                
+                //if the current hitCollider has the player component (if the current hit is the player)
                 if (hitColliders[i].gameObject.GetComponent<Player>())
                 {
-                    if (Vector3.Angle(transform.forward, directionToTarget) < viewRadius / 2)
+                    //set the target to the current transform of the current index in the hitCollider array
+                    target = hitColliders[i].transform;
+                    tempTarget.transform.position = target.position;
+                    
+
+                    //calculate the direction(vector) to the target
+                    Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+                    //calculate the distance to the target
+                    distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                    //if the angle to the player is less than half the view angle
+                    if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2)
                     {
-                        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+                        Debug.Log("SeesPlayer = True");
 
-                        if(!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, layer))
+                        if (distanceToTarget <= viewRadius)
                         {
-                            if (distanceToTarget <= viewRadius)
-                            {
-                                Enemy enemy = this.gameObject.GetComponent<Enemy>();
-
-                                enemy.seesPlayer = true;
-                                enemy.navMeshAgent.destination = target.position;
-
-                            }
+                            enemyPawn.seesPlayer = true;
+                            lastKnownTransform = tempTarget.transform;
                         }
+                        else
+                        {
+                            enemyPawn.seesPlayer = false;
+                        }
+                    }
+                    else
+                    {
+                        enemyPawn.seesPlayer = false;
                     }
                 }
             }
         }
+    }
+
+    public Vector3 AngleToTarget(float angleInDegrees, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleInDegrees += transform.eulerAngles.y;
+        }
+
+        return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
     }
 
     //this method handles the movement, by setting the variables in the animator
@@ -84,7 +124,25 @@ public class Pawn : MonoBehaviour
         }
     }
 
-    
+    public void HandleAttacking()
+    {
+        Enemy enemyPawn = this.gameObject.GetComponent<Enemy>();
+
+        enemyPawn.attackStartTime = Time.time;
+        anim.SetBool("isAttacking", true);
+    }
+
+    public void EndAttack()
+    {
+        Debug.Log("Called EndAttack");
+
+        Enemy enemyPawn = this.gameObject.GetComponent<Enemy>();
+
+        anim.SetBool("isAttacking", false);
+        enemyPawn.isAttacking = false;
+    }
+
+
 
 
 

@@ -13,6 +13,11 @@ public class EnemyController : MonoBehaviour
     public AI_STATES currentState;
     public bool seesPlayer;
     public float stateStartTime;
+    public GameObject attackButtonObject;
+    public bool isAttacking;
+    public float waitTime;
+    public float attackStartTime;
+
 
     [Header(("Navigation"))]
     public NavMeshAgent navMeshAgent;
@@ -24,7 +29,7 @@ public class EnemyController : MonoBehaviour
 
     public enum AI_STATES
     {
-        Idle, Chase, Attack, Patrol
+        Idle, Chase, Attack, Search
     }
 
     public void ChangeStates(AI_STATES newState)
@@ -35,49 +40,50 @@ public class EnemyController : MonoBehaviour
 
     public void Idle()
     {
-
+        navMeshAgent.destination = this.gameObject.transform.position;
+        pawn.anim.SetFloat("Speed", 0);
     }
 
     public void Attack()
     {
+        isAttacking = true;
+        navMeshAgent.destination = pawn.tempTarget.position;
 
+        if (isAttacking)
+        {
+            if (Time.time > attackStartTime + waitTime)
+            {
+                pawn.HandleAttacking();
+            }
+        }
     }
 
     public void Chase()
     {
-
+        navMeshAgent.destination = pawn.tempTarget.position;
+        pawn.HandleEnemyMovement();
     }
 
-    public void Patrol()
+    public void Search()
     {
-        target = currentPatrolPoint;
-        navMeshAgent.SetDestination(target.position);
-
-        if(Vector3.Distance(transform.position, patrolPoints[currentPatrolIndex].position) < .5f)
-        {
-            if (currentPatrolIndex + 1 < patrolPoints.Count)
-            {
-                currentPatrolIndex++;
-            }
-            else
-            {
-                currentPatrolIndex = 0;
-            }
-
-            currentPatrolPoint = patrolPoints[currentPatrolIndex];
-        }
+        navMeshAgent.destination = pawn.lastKnownTransform.position;
+        pawn.HandleEnemyMovement();
     }
+
 
     protected virtual void Start()
     {
         navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         pawn = gameObject.GetComponent<Pawn>();
         target = GameObject.Find("Player").GetComponent<Transform>();
+        attackButtonObject = GameObject.Find("AttackButton");
     }
     protected virtual void Update()
     {
         navMeshAgent.SetDestination(target.position);
         pawn.HandleEnemyMovement();
+
+        
     }
 
     protected void OnAnimatorMove()

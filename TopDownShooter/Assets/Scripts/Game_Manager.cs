@@ -8,7 +8,7 @@ public class Game_Manager : MonoBehaviour
 
     private Animator playerAnimator;
 
-    private Transform enemySpawn;
+    public Transform enemySpawn;
     [SerializeField] private GameObject enemyPrefab;
     private GameObject enemy;
 

@@ -2509,6 +2509,10 @@ MonoBehaviour:
   currentState: 3
   seesPlayer: 0
   stateStartTime: 0
+  attackButtonObject: {fileID: 0}
+  isAttacking: 0
+  waitTime: 1
+  attackStartTime: 0
   navMeshAgent: {fileID: 581702822958707359}
   target: {fileID: 0}
   patrolPoints: []
@@ -2517,7 +2521,7 @@ MonoBehaviour:
   maxHealth: 100
   initialHealth: 100
   currentHealth: 0
-  waitTIme: 3
+  attackDistance: 3
 --- !u!114 &581702822958707358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2544,10 +2548,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 100
   anim: {fileID: 2585673861995968871}
-  layer:
-    serializedVersion: 2
-    m_Bits: 512
-  viewRadius: 3
+  player: {fileID: 0}
+  viewRadius: 15
+  viewAngle: 90
+  lastKnownTransform: {fileID: 0}
+  distanceToTarget: 0
+  target: {fileID: 0}
 --- !u!54 &8144494117205665671
 Rigidbody:
   m_ObjectHideFlags: 0

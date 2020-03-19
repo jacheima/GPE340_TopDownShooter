@@ -15,7 +15,10 @@ public class Enemy : EnemyController
     [SerializeField] private float initialHealth;
 
     public float currentHealth;
-    public float waitTIme;
+    
+
+    public float attackDistance;
+    
 
 
     protected override void  Start()
@@ -25,6 +28,8 @@ public class Enemy : EnemyController
 
         navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         pawn = gameObject.GetComponent<Pawn>();
+
+        attackButtonObject = GameObject.Find("AttackButton");
 
         for (int i = 1; i < 5; i++)
         {
@@ -45,9 +50,7 @@ public class Enemy : EnemyController
             }
         }
 
-        currentState = AI_STATES.Patrol;
-        currentPatrolPoint = patrolPoints[currentPatrolIndex];
-
+        currentState = AI_STATES.Idle;
     }
 
     protected override void Update()
@@ -57,39 +60,65 @@ public class Enemy : EnemyController
             case AI_STATES.Attack:
                 Attack();
 
+                if (!seesPlayer)
+                {
+                    ChangeStates(AI_STATES.Search);
+                }
+
+                if (seesPlayer && pawn.distanceToTarget > attackDistance)
+                {
+                    ChangeStates(AI_STATES.Chase);
+                }
 
                 break;
             case AI_STATES.Chase:
                 Chase();
 
+                if (!seesPlayer)
+                {
+                    ChangeStates(AI_STATES.Search);
+                }
+
+                if (seesPlayer && pawn.distanceToTarget <= attackDistance)
+                {
+                    ChangeStates(AI_STATES.Attack);
+                }
 
                 break;
             case AI_STATES.Idle:
                 Idle();
 
-                if (seesPlayer && Vector3.Distance(transform.position, target.position) > 1f)
-                {
-                    ChangeStates(AI_STATES.Chase);
-                }
-
-                if (seesPlayer && Vector3.Distance(transform.position, target.position) < 1f)
+                if (seesPlayer && pawn.distanceToTarget < pawn.viewRadius)
                 {
                     ChangeStates(AI_STATES.Attack);
                 }
 
-                if (Time.time > stateStartTime + waitTIme)
+                if (seesPlayer && pawn.distanceToTarget > attackDistance)
                 {
-                    ChangeStates(AI_STATES.Patrol);
+                    ChangeStates(AI_STATES.Chase);
                 }
 
                 break;
-            case AI_STATES.Patrol:
-                Patrol();
+            case AI_STATES.Search:
+                Search();
 
+                if (Vector3.Distance(this.gameObject.transform.position, navMeshAgent.destination) < .5f && !seesPlayer)
+                {
+                    ChangeStates(AI_STATES.Idle);
+                }
+
+                if (seesPlayer && pawn.distanceToTarget > attackDistance)
+                {
+                    ChangeStates(AI_STATES.Chase);
+                }
+
+                if (seesPlayer && pawn.distanceToTarget <= attackDistance)
+                {
+                    ChangeStates(AI_STATES.Attack);
+                }
                 break;
         }
 
-        navMeshAgent.SetDestination(target.position);
 
     }
 
