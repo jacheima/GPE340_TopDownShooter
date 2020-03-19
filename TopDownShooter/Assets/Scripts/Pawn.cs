@@ -9,11 +9,14 @@ public class Pawn : MonoBehaviour
     [SerializeField] private float speed;
     //reference to the animator
     public Animator anim;
+    public LayerMask layer;
 
     //reference to the player component
     private Player player;
 
     private Enemy enemy;
+
+    [Header("FOV")] public float viewRadius;
 
     private void Awake()
     {
@@ -21,6 +24,40 @@ public class Pawn : MonoBehaviour
         anim = GetComponent<Animator>();
         //set the player component by getting the player component
         player = GetComponent<Player>();
+    }
+
+    void Update()
+    {
+        if (this.gameObject.GetComponent<Enemy>())
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, viewRadius, layer);
+
+            for (int i = 0; i < hitColliders.Length; i++)
+            {
+                Transform target = hitColliders[i].transform;
+                Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+                if (hitColliders[i].gameObject.GetComponent<Player>())
+                {
+                    if (Vector3.Angle(transform.forward, directionToTarget) < viewRadius / 2)
+                    {
+                        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                        if(!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, layer))
+                        {
+                            if (distanceToTarget <= viewRadius)
+                            {
+                                Enemy enemy = this.gameObject.GetComponent<Enemy>();
+
+                                enemy.seesPlayer = true;
+                                enemy.navMeshAgent.destination = target.position;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     //this method handles the movement, by setting the variables in the animator
@@ -46,6 +83,8 @@ public class Pawn : MonoBehaviour
             player.equippedWeapon.isTriggerPulled = true;
         }
     }
+
+    
 
 
 

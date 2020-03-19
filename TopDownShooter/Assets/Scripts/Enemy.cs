@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.AI;
+using UnityEngine.Experimental.XR;
 
 public class Enemy : EnemyController
 {
@@ -13,26 +15,84 @@ public class Enemy : EnemyController
     [SerializeField] private float initialHealth;
 
     public float currentHealth;
+    public float waitTIme;
 
-    void Start()
+
+    protected override void  Start()
     {
         currentHealth = initialHealth;
         this.gameObject.GetComponent<Pawn>().anim.SetFloat("Health", currentHealth);
+
+        navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+        pawn = gameObject.GetComponent<Pawn>();
+
+        for (int i = 1; i < 5; i++)
+        {
+            switch (i)
+            {
+                case 1:
+                    patrolPoints.Add(GameObject.Find("PP_1").transform);
+                    break;
+                case 2:
+                    patrolPoints.Add(GameObject.Find("PP_2").transform);
+                    break;
+                case 3:
+                    patrolPoints.Add(GameObject.Find("PP_3").transform);
+                    break;
+                case 4:
+                    patrolPoints.Add(GameObject.Find("PP_4").transform);
+                    break;
+            }
+        }
+
+        currentState = AI_STATES.Patrol;
+        currentPatrolPoint = patrolPoints[currentPatrolIndex];
+
     }
 
-    //this function adds the heal amount to the current health
-    public void Heal(float amount)
+    protected override void Update()
     {
-        //add the heal amount to the currentHealth
-        currentHealth += amount;
+        switch (currentState)
+        {
+            case AI_STATES.Attack:
+                Attack();
+
+
+                break;
+            case AI_STATES.Chase:
+                Chase();
+
+
+                break;
+            case AI_STATES.Idle:
+                Idle();
+
+                if (seesPlayer && Vector3.Distance(transform.position, target.position) > 1f)
+                {
+                    ChangeStates(AI_STATES.Chase);
+                }
+
+                if (seesPlayer && Vector3.Distance(transform.position, target.position) < 1f)
+                {
+                    ChangeStates(AI_STATES.Attack);
+                }
+
+                if (Time.time > stateStartTime + waitTIme)
+                {
+                    ChangeStates(AI_STATES.Patrol);
+                }
+
+                break;
+            case AI_STATES.Patrol:
+                Patrol();
+
+                break;
+        }
+
+        navMeshAgent.SetDestination(target.position);
+
     }
 
-    //this function adds the damage amount to the currentHealth
-    public void TakeDamage(float amount)
-    {
-        //subtract the damage amount from the currentHealth
-        currentHealth -= amount;
-    }
 
     
     //this property calculates the percent of health and returns it

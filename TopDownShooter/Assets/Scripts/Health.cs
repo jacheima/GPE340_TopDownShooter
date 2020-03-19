@@ -45,7 +45,7 @@ public class Health : MonoBehaviour
             else
             {
                 //heal the player the amount designated by the health pack
-                player.Heal(amount);
+                player.currentHealth += amount;
             }
 
 
@@ -66,7 +66,7 @@ public class Health : MonoBehaviour
             else
             {
                 //heal the enemy the amount designated by the health pack
-                enemy.TakeDamage(amount);
+                enemy.currentHealth += amount;
             }
         }
     }
@@ -90,7 +90,7 @@ public class Health : MonoBehaviour
             else
             {
                 //add the damage to the player
-                player.TakeDamage(damage);
+                player.currentHealth -= damage;
             }
 
 
@@ -105,7 +105,7 @@ public class Health : MonoBehaviour
             if (enemy.currentHealth - damage <= 0)
             {
                 pawn.GetComponent<Pawn>().anim.SetFloat("Health", 0);
-                pawn.GetComponent<NavMeshAgent>().destination = this.gameObject.transform.position;
+                //pawn.GetComponent<NavMeshAgent>().destination = null;
 
                 isDead = true;
                 float stateStartTime = Time.time;
@@ -116,7 +116,7 @@ public class Health : MonoBehaviour
             else
             {
                 //add the damage to the enemy
-                enemy.TakeDamage(damage);
+                enemy.currentHealth -= damage;
             }
         }
     }
