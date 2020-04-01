@@ -88,7 +88,7 @@ public class Enemy : EnemyController
             case AI_STATES.Idle:
                 Idle();
 
-                if (seesPlayer && pawn.distanceToTarget < pawn.viewRadius)
+                if (seesPlayer && pawn.distanceToTarget <= attackDistance)
                 {
                     ChangeStates(AI_STATES.Attack);
                 }

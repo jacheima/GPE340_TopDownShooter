@@ -23,6 +23,8 @@ public class Pawn : MonoBehaviour
     public Transform tempTarget;
     public Mesh newMesh;
 
+    public bool isDeathAnimDone;
+
     private void Awake()
     {
         //set the animator by getting the component
@@ -140,6 +142,11 @@ public class Pawn : MonoBehaviour
 
         anim.SetBool("isAttacking", false);
         enemyPawn.isAttacking = false;
+    }
+
+    public void EndOfDeath()
+    {
+        isDeathAnimDone = true;
     }
 
 

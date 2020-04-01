@@ -15,11 +15,13 @@ public class Player : WeaponsAgent
     [SerializeField] private Transform pistolAttachmentPoint;
     [SerializeField] private Transform shotgunAttachmentPoint;
 
+    public int liveCount;
+
     //the maximum health value
     public float maxHealth;
 
     //the initial health value
-    [SerializeField] private float initialHealth;
+    public float initialHealth = 100;
 
     //an event that is called when the player equips a weapon
     [SerializeField] private UnityEvent onEquip;
@@ -41,6 +43,7 @@ public class Player : WeaponsAgent
     {
         //set the animator to the animator on the player gameobject
         playerAnimator = GetComponent<Animator>();
+        playerAnimator.SetFloat("Health", initialHealth);
 
         //set the current health to the initial health
         currentHealth = initialHealth;
@@ -84,6 +87,9 @@ public class Player : WeaponsAgent
 
             //set the gameobject to the same layer as the player layer
             equippedWeapon.gameObject.layer = gameObject.layer;
+
+            Game_Manager.instance.machineGunEquipped = true;
+            Game_Manager.instance.pistolEquiped = false;
         }
         //if the weapon type is 2 (pistol)
         else if (type == 2)
@@ -98,6 +104,10 @@ public class Player : WeaponsAgent
 
             //set the gameobject to the same layer as the player layer
             equippedWeapon.gameObject.layer = gameObject.layer;
+
+            Game_Manager.instance.machineGunEquipped = false;
+            Game_Manager.instance.pistolEquiped = true;
+
         }
         //if the weapon type is 3 (shotgun)
         else if (type == 3)
@@ -132,6 +142,9 @@ public class Player : WeaponsAgent
 
             //set the equipped weapon to null
             equippedWeapon = null;
+
+            Game_Manager.instance.machineGunEquipped = false;
+            Game_Manager.instance.pistolEquiped = false;
         }
     }
 

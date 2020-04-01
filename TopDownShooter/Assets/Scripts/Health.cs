@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
     {
         if (Time.time > stateStartTime + waitTime && isDead)
         {
-            Kill(this.gameObject);
+            Kill("Enemy");
         }
     }
 
@@ -83,14 +83,16 @@ public class Health : MonoBehaviour
             //if the players health would be less than or equal to 0 after taking the damage
             if (player.currentHealth - damage <= 0)
             {
-                //call the kill function which would instantly kill the player
-                Kill(pawn);
+
+                player.GetComponent<Animator>().SetFloat("Health", 0f);
+
             }
             //otherwise,
             else
             {
                 //add the damage to the player
                 player.currentHealth -= damage;
+                player.GetComponent<Animator>().SetFloat("Health", player.currentHealth);
             }
 
 
@@ -109,7 +111,7 @@ public class Health : MonoBehaviour
 
                 isDead = true;
                 float stateStartTime = Time.time;
-                
+
 
             }
             //otherwise, 
@@ -122,20 +124,33 @@ public class Health : MonoBehaviour
     }
 
     //this function kills the gameobject passed into the function
-    public void Kill(GameObject kill)
+    public void Kill(string kill)
     {
-        //destroy the gameobject passed to it
-        Destroy(kill);
+        GameObject go = GameObject.FindWithTag(kill);
 
-        //Debug.Log(kill.gameObject.name + " was killed");
+        if (go.GetComponent<Player>())
+        {
+            Game_Manager.instance.playerLives--;
+            go.SetActive(false);
+            go.GetComponent<Player>().currentHealth = go.GetComponent<Player>().initialHealth;
+            go.GetComponent<Animator>().SetFloat("Health", go.GetComponent<Player>().initialHealth);
+            go.transform.position = new Vector3(0f, 0f, 0f);
+            go.GetComponent<Player>().UnequipWeapon();
+            go.SetActive(true);
+        }
 
         //if the person killed was an enemy
-        if (kill.gameObject.GetComponent<Enemy>())
+        if (go.GetComponent<Enemy>())
         {
             //set the bool in the game manager to false, so another enemy will spawn
             Game_Manager.instance.isTimerSet = false;
+            if(go.GetComponent<Pawn>().isDeathAnimDone)
+            {
+                Game_Manager.instance.DropItem(go);
+                Destroy(go);
+            }
+            
         }
-
     }
 
     //this method instantly sets the player or enemy health to maxHealth when called

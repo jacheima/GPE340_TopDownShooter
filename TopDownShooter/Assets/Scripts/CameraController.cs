@@ -7,8 +7,6 @@ public class CameraController : MonoBehaviour
 {
     //reference to the target that the camera will follow
     [SerializeField] private Transform target;
-    //this is the rotation speed that the player will rotate at
-    [SerializeField] private float targetRotationSpeed;
 
     //reference to the main camera
     private Camera main;
@@ -57,13 +55,18 @@ public class CameraController : MonoBehaviour
         Ray ray = main.ScreenPointToRay(Input.mousePosition);
 
         //raycast 
-        if (groundPlane.Raycast(ray, out distance))
+        if (groundPlane.Raycast(ray, out distance) && !Game_Manager.instance.pausedGame)
         {
             //save the point into a vector 3
             Vector3 intersectionPoint = ray.GetPoint(distance);
 
             //rotate the player to look at the intersection point
             target.LookAt(intersectionPoint);
+        }
+
+        if(groundPlane.Raycast(ray, out distance) && Game_Manager.instance.pausedGame)
+        {
+            
         }
     }
 }

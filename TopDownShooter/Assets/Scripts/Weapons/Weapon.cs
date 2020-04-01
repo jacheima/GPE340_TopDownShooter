@@ -59,6 +59,15 @@ public class Weapon : MonoBehaviour
             bullet.damage = damageAmount;
             //add force to the rigidbody to propell the bullet forward
             bullet.rb.AddRelativeForce(transform.forward * bulletSpeed, ForceMode.VelocityChange);
+
+            if(weaponType == 1)
+            {
+                Game_Manager.instance.machineGunCurrentMag--;
+            }
+            if(weaponType == 2)
+            {
+                Game_Manager.instance.pistolCurrentMag--;
+            }
             //set isTriggerPulled to false
             isTriggerPulled = false;
         }
