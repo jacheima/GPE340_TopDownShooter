@@ -64,6 +64,8 @@ public class Game_Manager : MonoBehaviour
     public GameObject videoMenu;
     public GameObject audioMenu;
 
+
+    public EnemyManager enemyManager;
     public static Game_Manager instance;
 
 
@@ -112,23 +114,12 @@ public class Game_Manager : MonoBehaviour
 
         optionsMenu.SetActive(false);
 
+        
+
     }
 
     void Update()
     {
-        if (!isTimerSet)
-        {
-            Debug.Log("isTimerSet = false");
-            SetEnemyTimer();
-        }
-        else
-        {
-            if (Time.time >= enemySpawnTimer + enemyTimerWaitTime && !enemy)
-            {
-                enemy = Instantiate(enemyPrefab, enemySpawn.position, enemySpawn.rotation);
-            }
-        }
-
         if(machineGunEquipped)
         {
             float ammoPercent = machineGunCurrentMag / machineGunMagMax;
@@ -201,6 +192,7 @@ public class Game_Manager : MonoBehaviour
         pausedGame = true;
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
+        
     }
 
     public void UnpauseGame()
@@ -208,6 +200,7 @@ public class Game_Manager : MonoBehaviour
         pausedGame = false;
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
+        
     }
 
     private void SetEnemyTimer()

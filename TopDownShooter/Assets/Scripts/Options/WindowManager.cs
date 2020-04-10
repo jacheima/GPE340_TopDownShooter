@@ -8,7 +8,6 @@ public class WindowManager : MonoBehaviour
 
     private const string RESOLUTION_PREF_KEY = "resolution";
 
-    [SerializeField] private TextMeshProUGUI resolutionText;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
 
     [SerializeField] private TMP_Dropdown qualityDropdown;

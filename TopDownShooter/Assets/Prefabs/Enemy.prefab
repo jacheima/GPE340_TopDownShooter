@@ -304,6 +304,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1700,6 +1701,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1882,6 +1884,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1967,6 +1970,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2521,7 +2525,7 @@ MonoBehaviour:
   maxHealth: 100
   initialHealth: 100
   currentHealth: 0
-  attackDistance: 3
+  attackDistance: 1
 --- !u!114 &581702822958707358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2556,6 +2560,7 @@ MonoBehaviour:
   target: {fileID: 0}
   tempTarget: {fileID: 0}
   newMesh: {fileID: 0}
+  isDeathAnimDone: 0
 --- !u!54 &8144494117205665671
 Rigidbody:
   m_ObjectHideFlags: 0

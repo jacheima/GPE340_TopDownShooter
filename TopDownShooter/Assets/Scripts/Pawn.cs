@@ -14,15 +14,6 @@ public class Pawn : MonoBehaviour
     public Player player;
     private Enemy enemy;
 
-    [Header("FOV")]
-    public float viewRadius;
-    public float viewAngle;
-    public Transform lastKnownTransform;
-    public float distanceToTarget;
-    public Transform target;
-    public Transform tempTarget;
-    public Mesh newMesh;
-
     public bool isDeathAnimDone;
 
     private void Awake()
@@ -35,61 +26,12 @@ public class Pawn : MonoBehaviour
 
     void Start()
     {
-        tempTarget = new GameObject("FollowTarget").transform;
+        
     }
 
     void Update()
     {
-        //if this game object has the enemy component (if this is an enemy)
-        if (this.gameObject.GetComponent<Enemy>())
-        {
-
-            //set the enemy by getting the enemy component on this gameobject
-            Enemy enemyPawn = this.gameObject.GetComponent<Enemy>();
-
-            //create an array populated with every game object in the view radius
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, viewRadius);
-
-            //for each hit in the hitColliders array
-            for (int i = 0; i < hitColliders.Length; i++)
-            {
-                
-                //if the current hitCollider has the player component (if the current hit is the player)
-                if (hitColliders[i].gameObject.GetComponent<Player>())
-                {
-                    //set the target to the current transform of the current index in the hitCollider array
-                    target = hitColliders[i].transform;
-                    tempTarget.transform.position = target.position;
-                    
-
-                    //calculate the direction(vector) to the target
-                    Vector3 directionToTarget = (target.position - transform.position).normalized;
-
-                    //calculate the distance to the target
-                    distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                    //if the angle to the player is less than half the view angle
-                    if (Vector3.Angle(transform.forward, directionToTarget) < viewAngle / 2)
-                    {
-                        Debug.Log("SeesPlayer = True");
-
-                        if (distanceToTarget <= viewRadius)
-                        {
-                            enemyPawn.seesPlayer = true;
-                            lastKnownTransform = tempTarget.transform;
-                        }
-                        else
-                        {
-                            enemyPawn.seesPlayer = false;
-                        }
-                    }
-                    else
-                    {
-                        enemyPawn.seesPlayer = false;
-                    }
-                }
-            }
-        }
+       
     }
 
     public Vector3 AngleToTarget(float angleInDegrees, bool angleIsGlobal)
@@ -147,6 +89,7 @@ public class Pawn : MonoBehaviour
     public void EndOfDeath()
     {
         isDeathAnimDone = true;
+        Destroy(this.gameObject, 2f);
     }
 
 

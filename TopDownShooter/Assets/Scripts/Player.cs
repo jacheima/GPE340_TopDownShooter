@@ -145,6 +145,7 @@ public class Player : WeaponsAgent
 
             Game_Manager.instance.machineGunEquipped = false;
             Game_Manager.instance.pistolEquiped = false;
+            isWeaponEquipped = false;
         }
     }
 

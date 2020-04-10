@@ -11,19 +11,16 @@ public class Health : MonoBehaviour
     float waitTime = 5f;
     float stateStartTime;
 
-    private bool isDead;
+    //private bool isDead;
 
     void Start()
     {
-        isDead = false;
+        //isDead = false;
     }
 
     void Update()
     {
-        if (Time.time > stateStartTime + waitTime && isDead)
-        {
-            Kill("Enemy");
-        }
+
     }
 
     //this method heals the enemy or player the amount designated by the health pack
@@ -107,12 +104,6 @@ public class Health : MonoBehaviour
             if (enemy.currentHealth - damage <= 0)
             {
                 pawn.GetComponent<Pawn>().anim.SetFloat("Health", 0);
-                //pawn.GetComponent<NavMeshAgent>().destination = null;
-
-                isDead = true;
-                float stateStartTime = Time.time;
-
-
             }
             //otherwise, 
             else
@@ -124,6 +115,22 @@ public class Health : MonoBehaviour
     }
 
     //this function kills the gameobject passed into the function
+
+    public void Kill(GameObject pawn)
+    {
+        //if the person killed was an enemy
+        if (pawn.GetComponent<Enemy>())
+        {
+            //set the bool in the game manager to false, so another enemy will spawn
+            if (pawn.GetComponent<Pawn>().isDeathAnimDone)
+            {
+                Game_Manager.instance.DropItem(pawn);
+                Game_Manager.instance.enemyManager.enemiesInLevel.Remove(pawn);
+                Destroy(pawn);
+            }
+
+        }
+    }
     public void Kill(string kill)
     {
         GameObject go = GameObject.FindWithTag(kill);
@@ -139,18 +146,7 @@ public class Health : MonoBehaviour
             go.SetActive(true);
         }
 
-        //if the person killed was an enemy
-        if (go.GetComponent<Enemy>())
-        {
-            //set the bool in the game manager to false, so another enemy will spawn
-            Game_Manager.instance.isTimerSet = false;
-            if(go.GetComponent<Pawn>().isDeathAnimDone)
-            {
-                Game_Manager.instance.DropItem(go);
-                Destroy(go);
-            }
-            
-        }
+        
     }
 
     //this method instantly sets the player or enemy health to maxHealth when called

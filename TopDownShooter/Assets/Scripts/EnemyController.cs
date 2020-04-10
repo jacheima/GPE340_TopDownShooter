@@ -29,25 +29,24 @@ public class EnemyController : MonoBehaviour
 
     public enum AI_STATES
     {
-        Idle, Chase, Attack, Search
+         Attack, Move
     }
-
     public void ChangeStates(AI_STATES newState)
     {
         currentState = newState;
         stateStartTime = Time.time;
     }
 
-    public void Idle()
-    {
-        navMeshAgent.destination = this.gameObject.transform.position;
-        pawn.anim.SetFloat("Speed", 0);
-    }
+    //public void Idle()
+    //{
+    //    navMeshAgent.destination = this.gameObject.transform.position;
+    //    pawn.anim.SetFloat("Speed", 0);
+    //}
 
     public void Attack()
     {
         isAttacking = true;
-        navMeshAgent.destination = pawn.tempTarget.position;
+        navMeshAgent.destination = target.position;
 
         if (isAttacking)
         {
@@ -58,17 +57,24 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void Chase()
+    public void Move()
     {
-        navMeshAgent.destination = pawn.tempTarget.position;
+        isAttacking = false;
+        navMeshAgent.destination = target.position;
         pawn.HandleEnemyMovement();
     }
 
-    public void Search()
-    {
-        navMeshAgent.destination = pawn.lastKnownTransform.position;
-        pawn.HandleEnemyMovement();
-    }
+    //public void Chase()
+    //{
+    //    navMeshAgent.destination = pawn.tempTarget.position;
+    //    pawn.HandleEnemyMovement();
+    //}
+
+    //public void Search()
+    //{
+    //    navMeshAgent.destination = pawn.lastKnownTransform.position;
+    //    pawn.HandleEnemyMovement();
+    //}
 
 
     protected virtual void Start()
@@ -76,7 +82,8 @@ public class EnemyController : MonoBehaviour
         navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         pawn = gameObject.GetComponent<Pawn>();
         target = GameObject.Find("Player").GetComponent<Transform>();
-        attackButtonObject = GameObject.Find("AttackButton");
+        navMeshAgent.SetDestination(target.position);
+        ChangeStates(AI_STATES.Move);
     }
     protected virtual void Update()
     {

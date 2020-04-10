@@ -29,28 +29,10 @@ public class Enemy : EnemyController
         navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         pawn = gameObject.GetComponent<Pawn>();
 
-        attackButtonObject = GameObject.Find("AttackButton");
+        target = GameObject.Find("Player").transform;
 
-        for (int i = 1; i < 5; i++)
-        {
-            switch (i)
-            {
-                case 1:
-                    patrolPoints.Add(GameObject.Find("PP_1").transform);
-                    break;
-                case 2:
-                    patrolPoints.Add(GameObject.Find("PP_2").transform);
-                    break;
-                case 3:
-                    patrolPoints.Add(GameObject.Find("PP_3").transform);
-                    break;
-                case 4:
-                    patrolPoints.Add(GameObject.Find("PP_4").transform);
-                    break;
-            }
-        }
-
-        currentState = AI_STATES.Idle;
+        navMeshAgent.SetDestination(target.position);
+        currentState = AI_STATES.Move;
     }
 
     protected override void Update()
@@ -60,62 +42,20 @@ public class Enemy : EnemyController
             case AI_STATES.Attack:
                 Attack();
 
-                if (!seesPlayer)
+                if (Vector3.Distance(transform.position, target.position) < attackDistance)
                 {
-                    ChangeStates(AI_STATES.Search);
-                }
-
-                if (seesPlayer && pawn.distanceToTarget > attackDistance)
-                {
-                    ChangeStates(AI_STATES.Chase);
+                    ChangeStates(AI_STATES.Move);
                 }
 
                 break;
-            case AI_STATES.Chase:
-                Chase();
+            case AI_STATES.Move:
+                Move();
 
-                if (!seesPlayer)
-                {
-                    ChangeStates(AI_STATES.Search);
-                }
-
-                if (seesPlayer && pawn.distanceToTarget <= attackDistance)
+                if (Vector3.Distance(transform.position, target.position) <= attackDistance)
                 {
                     ChangeStates(AI_STATES.Attack);
                 }
 
-                break;
-            case AI_STATES.Idle:
-                Idle();
-
-                if (seesPlayer && pawn.distanceToTarget <= attackDistance)
-                {
-                    ChangeStates(AI_STATES.Attack);
-                }
-
-                if (seesPlayer && pawn.distanceToTarget > attackDistance)
-                {
-                    ChangeStates(AI_STATES.Chase);
-                }
-
-                break;
-            case AI_STATES.Search:
-                Search();
-
-                if (Vector3.Distance(this.gameObject.transform.position, navMeshAgent.destination) < .5f && !seesPlayer)
-                {
-                    ChangeStates(AI_STATES.Idle);
-                }
-
-                if (seesPlayer && pawn.distanceToTarget > attackDistance)
-                {
-                    ChangeStates(AI_STATES.Chase);
-                }
-
-                if (seesPlayer && pawn.distanceToTarget <= attackDistance)
-                {
-                    ChangeStates(AI_STATES.Attack);
-                }
                 break;
         }
 
