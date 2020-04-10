@@ -22,7 +22,30 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //call the handle movement method in the pawn script
-        pawn.HandleMovement(new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")));
+        
+
+        Vector3 movement = new Vector3(0f, 0f, 0f);
+
+        if (Input.GetKey(Game_Manager.instance.keyBindManager.keys["Forward"]))
+        {
+            movement = Vector3.forward;
+        }
+        if (Input.GetKey(Game_Manager.instance.keyBindManager.keys["Backward"]))
+        {
+            movement = -Vector3.forward;
+        }
+
+        if (Input.GetKey(Game_Manager.instance.keyBindManager.keys["Left"]))
+        {
+            movement = -Vector3.right;
+        }
+
+        if (Input.GetKey(Game_Manager.instance.keyBindManager.keys["Right"]))
+        {
+            movement = Vector3.right;
+        }
+
+        pawn.HandleMovement(movement);
 
         //if the player presses the left mouse button
         if (Input.GetButtonDown("Fire1"))
@@ -30,7 +53,6 @@ public class PlayerController : MonoBehaviour
             //call the handle shooting method in pawn script
             pawn.HandleShooting();
         }
-
         ////for running
         //if (Input.GetKeyDown(KeyCode.LeftShift))
         //{

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Game_Manager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Game_Manager : MonoBehaviour
     public CameraController cameraController;
     private Player player;
     private Animator playerAnimator;
+    public Keybinding keyBindManager;
 
     [Header("Player Shooting Attributes")]
     public Image ammoFill;
@@ -56,6 +58,11 @@ public class Game_Manager : MonoBehaviour
     public bool pausedGame;
     public GameObject pauseMenu;
     public GameObject optionsMenu;
+
+    [Header("Options Menus Attributes")]
+    public GameObject controlsMenu;
+    public GameObject videoMenu;
+    public GameObject audioMenu;
 
     public static Game_Manager instance;
 
@@ -252,4 +259,24 @@ public class Game_Manager : MonoBehaviour
         Instantiate(weightedDrops[item], spawnLocation.transform.position, spawnLocation.transform.rotation);
     }
 
+    public void OpenControlOptions()
+    {
+        controlsMenu.SetActive(true);
+        videoMenu.SetActive(false);
+        audioMenu.SetActive(false);
+    }
+
+    public void OpenVideoOptions()
+    {
+        controlsMenu.SetActive(false);
+        videoMenu.SetActive(true);
+        audioMenu.SetActive(false);
+    }
+
+    public void OpenAudioOptions()
+    {
+        controlsMenu.SetActive(false);
+        videoMenu.SetActive(false);
+        audioMenu.SetActive(true);
+    }
 }
